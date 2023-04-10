@@ -1,6 +1,32 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { Product } from '@/app/models/product';
+import Catalog from '@/features/catalog/Catalog';
+import { Typography } from '@mui/material';
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => setProducts(data));
+  }, []);
+
+  const addProduct = () => {
+    setProducts(prevState => [
+      ...prevState,
+      {
+        id: prevState.length + 101,
+        name: 'product' + (prevState.length + 1),
+        price: prevState.length * 100 + 100,
+        brand: 'some brand',
+        description: 'some description',
+        pictureUrl: 'https://picsum.photos/200'
+      }
+    ]);
+  };
+
   return (
     <>
       <Head>
@@ -10,7 +36,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Re-Store</h1>
+        <Typography variant="h1">Re-Store</Typography>
+        <Catalog products={products} addProduct={addProduct} />
       </main>
     </>
   );
