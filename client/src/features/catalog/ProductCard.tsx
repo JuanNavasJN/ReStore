@@ -9,6 +9,7 @@ import {
   Typography,
   CardHeader
 } from '@mui/material';
+import Link from 'next/link';
 import React from 'react';
 
 interface Props {
@@ -53,7 +54,9 @@ export default function ProductCard({ product }: Props) {
       </CardContent>
       <CardActions>
         <Button size="small">Add to cart</Button>
-        <Button size="small">View</Button>
+        <Button size="small" component={Link} href={`/catalog/${product.id}`}>
+          View
+        </Button>
       </CardActions>
     </Card>
   );
