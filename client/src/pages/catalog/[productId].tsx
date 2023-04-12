@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import axios from 'axios';
 import { Product } from '@/app/models/product';
+import agent from '@/app/api/agent';
 
 export default function ProductPage() {
   const { query } = useRouter();
@@ -22,10 +22,9 @@ export default function ProductPage() {
 
   useEffect(() => {
     if (query.productId)
-      axios
-        .get(`http://localhost:5000/api/products/${query.productId}`)
-        .then(res => setProduct(res.data))
-        .catch(err => console.error(err))
+      agent.Catalog.details(parseInt(query.productId as string))
+        .then(res => setProduct(res))
+        .catch(err => console.error(err.response))
         .finally(() => setIsLoading(false));
   }, [query.productId]);
 

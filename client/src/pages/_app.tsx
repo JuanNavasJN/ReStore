@@ -8,12 +8,14 @@ import {
 import { useState } from 'react';
 import Header from '@/app/layout/Header';
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
 
 import '@/app/layout/globals.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -41,6 +43,11 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <ThemeProvider theme={theme}>
+        <ToastContainer
+          position="bottom-right"
+          hideProgressBar
+          theme="colored"
+        />
         <CssBaseline />
         <Header toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
         <main>
