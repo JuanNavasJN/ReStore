@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  CircularProgress,
   Divider,
   Grid,
   Table,
@@ -15,6 +14,7 @@ import Image from 'next/image';
 import { Product } from '@/app/models/product';
 import agent from '@/app/api/agent';
 import NotFound from '../404';
+import Loading from '@/app/layout/Loading';
 
 export default function ProductPage() {
   const { query } = useRouter();
@@ -29,7 +29,7 @@ export default function ProductPage() {
         .finally(() => setIsLoading(false));
   }, [query.productId]);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <Loading message="Loading product..." />;
 
   if (!product) return <NotFound />;
 
