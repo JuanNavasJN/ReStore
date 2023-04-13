@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Product } from '@/app/models/product';
 import agent from '@/app/api/agent';
+import NotFound from '../404';
 
 export default function ProductPage() {
   const { query } = useRouter();
@@ -30,7 +31,7 @@ export default function ProductPage() {
 
   if (isLoading) return <CircularProgress />;
 
-  if (!product) return <h3>Product not found</h3>;
+  if (!product) return <NotFound />;
 
   return (
     <Grid container spacing={6}>

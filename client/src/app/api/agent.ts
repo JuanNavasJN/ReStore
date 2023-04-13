@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import Router from 'next/router';
 import { toast } from 'react-toastify';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
@@ -29,7 +30,13 @@ axios.interceptors.response.use(
         toast.error(data.title);
         break;
       case 500:
-        toast.error(data.title);
+        Router.push(
+          {
+            pathname: '/server-error',
+            query: data
+          },
+          '/server-error'
+        );
         break;
       default:
         break;
