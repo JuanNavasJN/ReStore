@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   AppBar,
   Toolbar,
@@ -12,6 +11,8 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { ShoppingCart } from '@mui/icons-material';
+import { useStoreContext } from '../context/StoreContext';
+import { useMemo } from 'react';
 
 const midLinks = [
   {
@@ -54,6 +55,13 @@ const navStyles = {
 };
 
 export default function Header({ toggleDarkMode, isDarkMode }: Props) {
+  const { basket } = useStoreContext();
+
+  const itemCount = useMemo(
+    () => basket?.items.reduce((sum, item) => sum + item.quantity, 0),
+    [basket]
+  );
+
   return (
     <AppBar position="static" sx={{ mb: 4 }}>
       <Toolbar
@@ -79,8 +87,15 @@ export default function Header({ toggleDarkMode, isDarkMode }: Props) {
         </List>
 
         <Box display="flex" alignItems="center">
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent="4" color="secondary">
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            sx={{ mr: 2 }}
+            component={Link}
+            href="/basket"
+          >
+            <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

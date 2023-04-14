@@ -9,6 +9,8 @@ import { useState } from 'react';
 import Header from '@/app/layout/Header';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
+import { StoreProvider } from '@/app/context/StoreContext';
+import Initializer from '@/app/Initializer';
 
 import '@/app/layout/globals.css';
 import '@fontsource/roboto/300.css';
@@ -43,18 +45,22 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        <ToastContainer
-          position="bottom-right"
-          hideProgressBar
-          theme="colored"
-        />
-        <CssBaseline />
-        <Header toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
-        <main>
-          <Container>
-            <Component {...pageProps} />
-          </Container>
-        </main>
+        <StoreProvider>
+          <ToastContainer
+            position="bottom-right"
+            hideProgressBar
+            theme="colored"
+          />
+          <CssBaseline />
+          <Header toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
+          <main>
+            <Container>
+              <Initializer>
+                <Component {...pageProps} />
+              </Initializer>
+            </Container>
+          </main>
+        </StoreProvider>
       </ThemeProvider>
     </>
   );
