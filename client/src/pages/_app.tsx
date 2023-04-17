@@ -9,8 +9,9 @@ import { useState } from 'react';
 import Header from '@/app/layout/Header';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
-import { StoreProvider } from '@/app/context/StoreContext';
 import Initializer from '@/app/Initializer';
+import { Provider } from 'react-redux';
+import { store } from '@/app/store';
 
 import '@/app/layout/globals.css';
 import '@fontsource/roboto/300.css';
@@ -45,7 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <ThemeProvider theme={theme}>
-        <StoreProvider>
+        <Provider store={store}>
           <ToastContainer
             position="bottom-right"
             hideProgressBar
@@ -60,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
               </Initializer>
             </Container>
           </main>
-        </StoreProvider>
+        </Provider>
       </ThemeProvider>
     </>
   );

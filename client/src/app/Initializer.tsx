@@ -1,26 +1,25 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import Loading from './layout/Loading';
 import agent from './api/agent';
-import { useStoreContext } from './context/StoreContext';
 import { getCookie } from './util';
+import { useAppDispatch } from './store';
+import { setBasket } from '@/features/basket/basketSlice';
 
 export default function Initializer({ children }: PropsWithChildren) {
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const buyerId = getCookie('buyerId');
     if (buyerId) {
       agent.Basket.get()
-        .then(basket => {
-          setBasket(basket);
-        })
+        .then(basket => dispatch(setBasket(basket)))
         .catch(console.error)
         .finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);
     }
-  }, [setBasket]);
+  }, [dispatch]);
 
   if (isLoading) return <Loading message="Initialising app..." />;
 

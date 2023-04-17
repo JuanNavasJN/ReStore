@@ -1,7 +1,10 @@
-import agent from '@/app/api/agent';
-import { useStoreContext } from '@/app/context/StoreContext';
+import { useAppDispatch, useAppSelector } from '@/app/store';
 import { currencyFormat } from '@/app/util';
 import BasketSummary from '@/features/basket/BasketSummary';
+import {
+  addBasketItemAsync,
+  removeBasketItemAsync
+} from '@/features/basket/basketSlice';
 import { Add, Delete, Remove } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -19,36 +22,10 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
 
 export default function BasketPage() {
-  const { basket, setBasket, removeItem } = useStoreContext();
-  const [status, setStatus] = useState({
-    loading: false,
-    name: ''
-  });
-
-  const handleAddItem = useCallback(
-    (productId: number, name: string) => {
-      setStatus({ loading: true, name });
-      agent.Basket.addItem(productId)
-        .then(basket => setBasket(basket))
-        .catch(console.error)
-        .finally(() => setStatus({ loading: false, name: '' }));
-    },
-    [setBasket]
-  );
-
-  const handleRemoveItem = useCallback(
-    (productId: number, quantity = 1, name: string) => {
-      setStatus({ loading: true, name });
-      agent.Basket.removeItem(productId, quantity)
-        .then(() => removeItem(productId, quantity))
-        .catch(console.error)
-        .finally(() => setStatus({ loading: false, name: '' }));
-    },
-    [removeItem]
-  );
+  const dispatch = useAppDispatch();
+  const { basket, status } = useAppSelector(state => state.basket);
 
   if (!basket)
     return <Typography variant="h3">Your basket is empty</Typography>;
@@ -90,13 +67,14 @@ export default function BasketPage() {
                 <TableCell align="center">
                   <LoadingButton
                     loading={
-                      status.loading && status.name === 'rem' + item.productId
+                      status === 'pendingRemoveItem' + item.productId + 'rem'
                     }
                     onClick={() =>
-                      handleRemoveItem(
-                        item.productId,
-                        1,
-                        'rem' + item.productId
+                      dispatch(
+                        removeBasketItemAsync({
+                          productId: item.productId,
+                          name: 'rem'
+                        })
                       )
                     }
                     color="error"
@@ -107,11 +85,13 @@ export default function BasketPage() {
                   {item.quantity}
                   <LoadingButton
                     color="secondary"
-                    loading={
-                      status.loading && status.name === 'add' + item.productId
-                    }
+                    loading={status === 'pendingAddItem' + item.productId}
                     onClick={() =>
-                      handleAddItem(item.productId, 'add' + item.productId)
+                      dispatch(
+                        addBasketItemAsync({
+                          productId: item.productId
+                        })
+                      )
                     }
                   >
                     <Add />
@@ -124,13 +104,15 @@ export default function BasketPage() {
                   <LoadingButton
                     color="error"
                     loading={
-                      status.loading && status.name === 'del' + item.productId
+                      status === 'pendingRemoveItem' + item.productId + 'del'
                     }
                     onClick={() =>
-                      handleRemoveItem(
-                        item.productId,
-                        item.quantity,
-                        'del' + item.productId
+                      dispatch(
+                        removeBasketItemAsync({
+                          productId: item.productId,
+                          quantity: item.quantity,
+                          name: 'del'
+                        })
                       )
                     }
                   >

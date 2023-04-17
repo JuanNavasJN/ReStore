@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { ShoppingCart } from '@mui/icons-material';
-import { useStoreContext } from '../context/StoreContext';
 import { useMemo } from 'react';
+import { useAppSelector } from '../store';
 
 const midLinks = [
   {
@@ -55,7 +55,7 @@ const navStyles = {
 };
 
 export default function Header({ toggleDarkMode, isDarkMode }: Props) {
-  const { basket } = useStoreContext();
+  const { basket } = useAppSelector(state => state.basket);
 
   const itemCount = useMemo(
     () => basket?.items.reduce((sum, item) => sum + item.quantity, 0),
