@@ -11,11 +11,10 @@ import {
   CardHeader
 } from '@mui/material';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import { currencyFormat } from '@/app/util';
 import { useAppDispatch, useAppSelector } from '@/app/store';
-import { setBasket } from '../basket/basketSlice';
 import { addBasketItemAsync } from '../basket/basketSlice';
 
 interface Props {

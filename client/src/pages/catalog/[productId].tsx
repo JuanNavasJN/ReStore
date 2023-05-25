@@ -12,8 +12,6 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { Product } from '@/app/models/product';
-import agent from '@/app/api/agent';
 import NotFound from '../404';
 import Loading from '@/app/layout/Loading';
 import { LoadingButton } from '@mui/lab';
@@ -22,26 +20,31 @@ import {
   addBasketItemAsync,
   removeBasketItemAsync
 } from '@/features/basket/basketSlice';
+import {
+  fetchProductAsync,
+  productSelectors
+} from '@/features/catalog/catalogSlice';
 
 export default function ProductPage() {
   const { basket, status } = useAppSelector(state => state.basket);
   const dispatch = useAppDispatch();
   const { query } = useRouter();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(0);
+  const { status: productStatus } = useAppSelector(state => state.catalog);
+  const product = useAppSelector(state =>
+    productSelectors.selectById(state, parseInt(query.productId as string))
+  );
 
   const item = useMemo(() => {
     return basket?.items.find(i => i.productId === product?.id);
   }, [basket, product]);
 
   useEffect(() => {
-    if (query.productId)
-      agent.Catalog.details(parseInt(query.productId as string))
-        .then(res => setProduct(res))
-        .catch(err => console.error(err.response))
-        .finally(() => setIsLoading(false));
-  }, [query.productId]);
+    if (query.productId) {
+      if (!product)
+        dispatch(fetchProductAsync(parseInt(query.productId as string)));
+    }
+  }, [query.productId, dispatch, product]);
 
   useEffect(() => {
     if (item) setQuantity(item.quantity);
@@ -74,7 +77,8 @@ export default function ProductPage() {
     }
   };
 
-  if (isLoading) return <Loading message="Loading product..." />;
+  if (productStatus.includes('pending'))
+    return <Loading message="Loading product..." />;
 
   if (!product) return <NotFound />;
 
@@ -139,7 +143,7 @@ export default function ProductPage() {
               size="large"
               variant="contained"
               fullWidth
-              loading={status.includes('pendingRemoveItem' + item?.productId)}
+              loading={status.includes('pending')}
               onClick={handleUpdateCart}
               disabled={
                 item?.quantity === quantity || (!item && quantity === 0)
