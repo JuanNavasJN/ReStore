@@ -5,7 +5,7 @@ import {
   ThemeProvider,
   createTheme
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '@/app/layout/Header';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
@@ -34,7 +34,18 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   });
 
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  useEffect(() => {
+    const isDark = localStorage.getItem('isDarkMode');
+
+    if (isDark) {
+      setIsDarkMode(Boolean(isDark));
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem('isDarkMode', String(!isDarkMode));
+  };
 
   return (
     <>
