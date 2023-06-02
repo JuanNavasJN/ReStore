@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const isDark = localStorage.getItem('isDarkMode');
 
     if (isDark) {
-      setIsDarkMode(Boolean(isDark));
+      setIsDarkMode(isDark === 'true');
     }
   }, []);
 

@@ -34,7 +34,7 @@ export default function ProductCard({ product }: Props) {
               bgcolor: 'secondary.main'
             }}
           >
-            {product.name.charAt(0).toUpperCase()}
+            {product.name?.charAt(0).toUpperCase()}
           </Avatar>
         }
         title={product.name}

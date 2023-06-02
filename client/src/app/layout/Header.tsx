@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { ShoppingCart } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { useAppSelector } from '../store';
+import SignedMenu from './SignedMenu';
 
 const midLinks = [
   {
@@ -56,6 +57,7 @@ const navStyles = {
 
 export default function Header({ toggleDarkMode, isDarkMode }: Props) {
   const { basket } = useAppSelector(state => state.basket);
+  const { user } = useAppSelector(state => state.account);
 
   const itemCount = useMemo(
     () => basket?.items.reduce((sum, item) => sum + item.quantity, 0),
@@ -100,13 +102,22 @@ export default function Header({ toggleDarkMode, isDarkMode }: Props) {
             </Badge>
           </IconButton>
 
-          <List sx={{ display: 'flex' }}>
-            {rightLinks.map(({ title, path }) => (
-              <ListItem key={title} component={Link} href={path} sx={navStyles}>
-                {title.toUpperCase()}
-              </ListItem>
-            ))}
-          </List>
+          {user ? (
+            <SignedMenu />
+          ) : (
+            <List sx={{ display: 'flex' }}>
+              {rightLinks.map(({ title, path }) => (
+                <ListItem
+                  key={title}
+                  component={Link}
+                  href={path}
+                  sx={navStyles}
+                >
+                  {title.toUpperCase()}
+                </ListItem>
+              ))}
+            </List>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
