@@ -1,11 +1,13 @@
 import agent from '@/app/api/agent';
 import withAuth from '@/app/components/withAuth';
-import { useAppDispatch } from '@/app/store';
+import { ShippingAddress } from '@/app/models/order';
+import { useAppDispatch, useAppSelector } from '@/app/store';
 import { clearBasket } from '@/features/basket/basketSlice';
 import AddressForm from '@/features/checkout/AddressForm';
 import PaymentForm from '@/features/checkout/PaymentForm';
 import Review from '@/features/checkout/Review';
 import { validationSchema } from '@/features/checkout/checkoutValidation';
+import { createOrderAsync } from '@/features/orders/ordersSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -40,6 +42,7 @@ const CheckoutPage = () => {
   const [orderNumber, setOrderNumber] = useState(0);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const { newOrderId } = useAppSelector(state => state.orders);
 
   const currentValidationSchema = validationSchema[activeStep];
 
@@ -60,16 +63,22 @@ const CheckoutPage = () => {
     });
   }, [methods]);
 
+  useEffect(() => {
+    if (newOrderId) setOrderNumber(newOrderId);
+  }, [newOrderId]);
+
   const handleNext = async (data: FieldValues) => {
     const { nameOnCard, saveAddress, ...shippingAddress } = data;
     if (activeStep === steps.length - 1) {
       setLoading(true);
       try {
-        const orderNumber = await agent.Orders.create({
-          saveAddress,
-          shippingAddress
-        });
-        setOrderNumber(orderNumber);
+        dispatch(
+          createOrderAsync({
+            saveAddress,
+            shippingAddress: shippingAddress as ShippingAddress
+          })
+        );
+
         setActiveStep(activeStep + 1);
         dispatch(clearBasket());
       } catch (error) {

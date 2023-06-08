@@ -9,20 +9,27 @@ import {
   TableCell
 } from '@mui/material';
 import { useAppSelector } from '@/app/store';
+import { BasketItem } from '@/app/models/basket';
 
-export default function BasketSummary() {
+interface Props {
+  items?: BasketItem[];
+}
+
+export default function BasketSummary({ items }: Props) {
   const { basket } = useAppSelector(state => state.basket);
 
   const [deliveryFee, setDeliveryfee] = useState(700);
 
-  const subtotal = useMemo(
-    () =>
-      basket?.items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      ) || 0,
-    [basket]
-  );
+  const subtotal = useMemo(() => {
+    let basketItems = basket?.items;
+
+    if (items) basketItems = items;
+
+    return (
+      basketItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) ||
+      0
+    );
+  }, [basket, items]);
 
   useEffect(() => {
     if (subtotal > 10000) setDeliveryfee(0);

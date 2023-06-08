@@ -1,6 +1,5 @@
-import agent from '@/app/api/agent';
 import Loading from '@/app/layout/Loading';
-import { Order } from '@/app/models/order';
+import { useAppDispatch, useAppSelector } from '@/app/store';
 import { currencyFormat } from '@/app/util';
 import {
   TableContainer,
@@ -12,20 +11,19 @@ import {
   TableBody,
   Button
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { fetchOrdersAsync } from './ordersSlice';
+import Link from 'next/link';
 
 function Orders() {
-  const [orders, setOrders] = useState<Order[] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { orders } = useAppSelector(state => state.orders);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    agent.Orders.list()
-      .then(orders => setOrders(orders))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+    dispatch(fetchOrdersAsync());
+  }, [dispatch]);
 
-  if (loading) return <Loading message="Loading orders..." />;
+  if (!orders) return <Loading message="Loading orders..." />;
 
   return (
     <TableContainer component={Paper}>
@@ -54,7 +52,9 @@ function Orders() {
               </TableCell>
               <TableCell align="right">{order.orderStatus}</TableCell>
               <TableCell align="right">
-                <Button>View</Button>
+                <Button component={Link} href={`/orders/${order.id}`}>
+                  View
+                </Button>
               </TableCell>
             </TableRow>
           ))}
