@@ -6,9 +6,7 @@ import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { setBasket } from '../basket/basketSlice';
 import Loading from '@/app/layout/Loading';
 
-const stripePromise = loadStripe(
-  'pk_test_51MtDI3Go9Ks0zHFVyAHREJHy6x6UodYyqezGRVErS6EVm35kop9HeQCeuysRC4cGp0lACBlfxDxlPkXV10lt337c00GZzPfISW'
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 const CheckoutWrapper = ({ children }: PropsWithChildren) => {
   const dispatch = useAppDispatch();
