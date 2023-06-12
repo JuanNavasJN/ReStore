@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../models/pagination';
 import { store } from '../store';
 
-axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 100));
+const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 axios.interceptors.request.use(config => {
   const token = store.getState().account.user?.token;
@@ -19,7 +19,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(
   async response => {
-    await sleep();
+    if (process.env.NODE_ENV === 'development') await sleep();
 
     const pagination = response.headers['pagination'];
 
