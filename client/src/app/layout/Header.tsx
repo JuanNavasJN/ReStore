@@ -86,6 +86,11 @@ export default function Header({ toggleDarkMode, isDarkMode }: Props) {
               {title.toUpperCase()}
             </ListItem>
           ))}
+          {user && user.roles?.includes('Admin') && (
+            <ListItem component={Link} href={'/admin/inventory'} sx={navStyles}>
+              INVENTORY
+            </ListItem>
+          )}
         </List>
 
         <Box display="flex" alignItems="center">
