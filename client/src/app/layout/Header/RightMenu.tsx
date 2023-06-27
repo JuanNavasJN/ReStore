@@ -79,7 +79,6 @@ export default function RightMenu() {
               size="large"
               edge="start"
               color="inherit"
-              sx={{ mr: 2 }}
             >
               <Menu fontSize="large" />
             </IconButton>
