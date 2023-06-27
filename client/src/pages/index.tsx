@@ -24,7 +24,7 @@ const images = [
 
 export default function HomePage() {
   return (
-    <div className={styles.HomePage}>
+    <div className={styles.homePage}>
       <Slider
         arrows={false}
         dots
@@ -32,13 +32,13 @@ export default function HomePage() {
         speed={1500}
         slidesToShow={1}
         slidesToScroll={1}
-        className={styles.Slider}
+        className={styles.slider}
         autoplay
         autoplaySpeed={2500}
       >
         {images.map(img => (
-          <div key={img.alt} className={styles.ImageContainer}>
-            <Image className={styles.Image} src={img.src} alt={img.alt} fill />
+          <div key={img.alt} className={styles.imageContainer}>
+            <Image className={styles.image} src={img.src} alt={img.alt} fill />
           </div>
         ))}
       </Slider>

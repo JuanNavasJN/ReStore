@@ -1,0 +1,22 @@
+.mobile {
+  display: none;
+}
+
+@media (max-width: 630px) {
+  .desktop {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  .list {
+    flex-wrap: wrap;
+  }
+
+  .list .listItem {
+    width: 80%;
+    margin-left: 10%;
+  }
+}

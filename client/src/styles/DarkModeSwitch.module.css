@@ -27,8 +27,7 @@
 }
 
 @media (max-width: 630px) {
-  .darkModeSwitchContainer {
-    top: 10px;
-    right: 10px;
+  .darkModeSwitchContainer .button {
+    margin-left: 0px;
   }
 }

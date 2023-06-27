@@ -1,0 +1,9 @@
+@media (max-width: 740px) {
+  .title {
+    display: none;
+  }
+
+  .desktop {
+    display: none;
+  }
+}

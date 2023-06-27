@@ -1,16 +1,22 @@
-.HomePage {
+.homePage {
   position: absolute;
   left: 0;
   width: 100%;
 }
 
-.Slider .ImageContainer {
+.slider .imageContainer {
   height: 465px;
   position: relative;
 }
 
-.Slider .ImageContainer img {
+.slider .imageContainer img {
   max-width: 2000px;
   margin: 0 auto;
   object-fit: cover;
+}
+
+@media (max-width: 630px) {
+  .slider .imageContainer {
+    height: 340px;
+  }
 }

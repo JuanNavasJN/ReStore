@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { signOut } from '@/features/account/accountSlice';
 import { clearBasket } from '@/features/basket/basketSlice';
 import Link from 'next/link';
+import styles from '@/styles/SignedMenu.module.css';
+import { Person } from '@mui/icons-material';
 
 function SignedMenu() {
   const dispatch = useAppDispatch();
@@ -22,7 +24,8 @@ function SignedMenu() {
   return (
     <>
       <Button color="inherit" sx={{ typography: 'h6' }} onClick={handleClick}>
-        {user?.email}
+        <span className={styles.desktop}>{user?.email}</span>
+        <Person className={styles.mobile} />
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -30,7 +33,6 @@ function SignedMenu() {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem component={Link} href="/orders">
           My orders
         </MenuItem>
