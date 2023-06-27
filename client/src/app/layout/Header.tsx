@@ -2,7 +2,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Switch,
   List,
   ListItem,
   IconButton,
@@ -14,6 +13,7 @@ import { ShoppingCart } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { useAppSelector } from '../store';
 import SignedMenu from './SignedMenu';
+import DarkModeSwitch from '../components/DarkModeSwitch';
 
 const midLinks = [
   {
@@ -73,7 +73,11 @@ export default function Header({ toggleDarkMode, isDarkMode }: Props) {
           <Typography variant="h6" component={Link} href={'/'} sx={navStyles}>
             RE-STORE
           </Typography>
-          <Switch onChange={toggleDarkMode} checked={isDarkMode} />
+
+          <DarkModeSwitch
+            toggleDarkMode={toggleDarkMode}
+            isDarkMode={isDarkMode}
+          />
         </Box>
 
         <List sx={{ display: 'flex' }}>
