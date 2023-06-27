@@ -1,0 +1,16 @@
+.HomePage {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.Slider .ImageContainer {
+  height: 465px;
+  position: relative;
+}
+
+.Slider .ImageContainer img {
+  max-width: 2000px;
+  margin: 0 auto;
+  object-fit: cover;
+}

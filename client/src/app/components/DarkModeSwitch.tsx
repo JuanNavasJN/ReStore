@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import styles from '../styles/DarkModeSwitch.module.css';
+import styles from '../../styles/DarkModeSwitch.module.css';
 
 interface Props {
   toggleDarkMode: () => void;
