@@ -21,10 +21,6 @@ const midLinks = [
     path: '/catalog'
   },
   {
-    title: 'about',
-    path: '/about'
-  },
-  {
     title: 'contact',
     path: '/contact'
   }
