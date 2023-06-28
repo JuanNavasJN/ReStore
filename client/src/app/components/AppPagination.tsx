@@ -1,6 +1,7 @@
 import { Box, Typography, Pagination } from '@mui/material';
 import { MetaData } from '../models/pagination';
 import { useState } from 'react';
+import styles from '@/styles/AppPagination.module.css';
 
 interface Props {
   metaData: MetaData;
@@ -18,7 +19,7 @@ export default function AppPagination({ metaData, onPageChange }: Props) {
 
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Typography>
+      <Typography className={styles.text}>
         Displaying {(currentPage - 1) * pageSize + 1}-
         {currentPage * pageSize > totalCount
           ? totalCount

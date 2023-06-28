@@ -1,0 +1,28 @@
+.filtersButton {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .filtersContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filtersButton {
+    display: block;
+  }
+
+  .desktopFilters {
+    display: none;
+  }
+
+  .mobileFilters {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    overflow-x: scroll;
+    height: 100%;
+    width: 100%;
+  }
+}
