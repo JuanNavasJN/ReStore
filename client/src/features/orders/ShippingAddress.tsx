@@ -15,7 +15,7 @@ const Detail = ({ name, value }: { name: string; value: string }) => {
 
 const ShippingAddress = (props: ShippingAddress) => {
   return (
-    <Grid container sx={{ py: 2, px: 4 }} component={Paper}>
+    <Grid sx={{ py: 2, px: 4 }} component={Paper}>
       <Grid item sm={12} sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant="h6">Shipping Address</Typography>
       </Grid>

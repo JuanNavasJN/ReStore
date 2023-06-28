@@ -41,17 +41,17 @@ function OrderPage() {
         </Box>
       </Grid>
 
-      <Grid sm={12} item sx={{ my: 2 }}>
-        <BasketTable
-          isBasket={false}
-          items={order.orderItems as BasketItem[]}
-        />
-      </Grid>
-      <Grid item sm={5} sx={{ mb: 2 }}>
+      <Box mb={2} width="100%" />
+
+      <BasketTable isBasket={false} items={order.orderItems as BasketItem[]} />
+
+      <Box mt={2} width="100%" />
+
+      <Grid item xs={12} sm={5} sx={{ mb: 2 }}>
         <ShippingAddress {...order.shippingAddress} />
       </Grid>
       <Grid item sm={2}></Grid>
-      <Grid sm={5} item sx={{ mb: 2 }}>
+      <Grid xs={12} sm={5} item sx={{ mb: 2 }}>
         <BasketSummary items={order.orderItems as BasketItem[]} />
       </Grid>
     </Grid>

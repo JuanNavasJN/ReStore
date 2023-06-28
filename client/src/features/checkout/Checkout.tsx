@@ -26,6 +26,7 @@ import {
 import { StripeElementType } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
+import styles from '@/styles/Checkout.module.css';
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
@@ -119,7 +120,7 @@ const Checkout = () => {
           }
         }
       );
-      console.log(paymentResult);
+
       if (paymentResult.paymentIntent?.status === 'succeeded') {
         dispatch(
           createOrderAsync({
@@ -180,7 +181,9 @@ const Checkout = () => {
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
           {steps.map(label => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel>
+                <span className={styles.stepLabel}>{label}</span>
+              </StepLabel>
             </Step>
           ))}
         </Stepper>

@@ -21,7 +21,7 @@ export default function PaymentForm({ onCardInputChange, cardState }: Props) {
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom mb={2}>
         Payment method
       </Typography>
       <Grid container spacing={3}>
