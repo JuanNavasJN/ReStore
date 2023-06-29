@@ -11,16 +11,17 @@ import { useAppSelector } from '../../store';
 import DarkModeSwitch from '../../components/DarkModeSwitch';
 import styles from '@/styles/Header.module.css';
 import RightMenu from './RightMenu';
+import { Inventory } from '@mui/icons-material';
 
 const midLinks = [
   {
     title: 'catalog',
     path: '/catalog'
-  },
-  {
-    title: 'contact',
-    path: '/contact'
   }
+  // {
+  //   title: 'contact',
+  //   path: '/contact'
+  // }
 ];
 
 interface Props {
@@ -80,7 +81,8 @@ export default function Header({ toggleDarkMode, isDarkMode }: Props) {
           ))}
           {user && user.roles?.includes('Admin') && (
             <ListItem component={Link} href={'/admin/inventory'} sx={navStyles}>
-              INVENTORY
+              <span className={styles.desktop}>INVENTORY</span>
+              <Inventory className={styles.mobile} />
             </ListItem>
           )}
         </List>

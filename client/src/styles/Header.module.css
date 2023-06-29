@@ -1,3 +1,7 @@
+.mobile {
+  display: none;
+}
+
 @media (max-width: 740px) {
   .title {
     display: none;
@@ -5,5 +9,9 @@
 
   .desktop {
     display: none !important;
+  }
+
+  .mobile {
+    display: block;
   }
 }

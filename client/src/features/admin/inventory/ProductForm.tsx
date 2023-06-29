@@ -106,13 +106,11 @@ export default function ProductForm({ product, cancelEdit }: Props) {
               rows={4}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <AppDropzone control={control} name="file" />
+          <Grid item xs={12} sm={6}>
+            <AppDropzone control={control} name="file" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Box display="flex" justifyContent="center">
               {watchFile ? (
                 <Image
                   src={watchFile.preview}

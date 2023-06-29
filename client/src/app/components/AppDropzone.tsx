@@ -17,7 +17,7 @@ export default function AppDropzone(props: Props) {
     paddingTop: '30px',
     alignItems: 'center',
     height: 200,
-    width: 500
+    width: '100%'
   };
 
   const dzActive = {
@@ -43,7 +43,7 @@ export default function AppDropzone(props: Props) {
       >
         <input {...getInputProps()} />
         <UploadFile sx={{ fontSize: '100px' }} />
-        <Typography variant="h4">Drop image here</Typography>
+        <Typography variant="h5">Drop image here</Typography>
         <FormHelperText>{fieldState.error?.message}</FormHelperText>
       </FormControl>
     </div>
