@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -15,12 +16,17 @@ namespace API.Controllers
     private readonly UserManager<User> _userManager;
     private readonly TokenService _tokenService;
     private readonly StoreContext _context;
+    private readonly EmailService _emailService;
 
-    public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
+    public AccountController(
+        UserManager<User> userManager, TokenService tokenService, 
+        StoreContext context, EmailService emailService
+    )
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _context = context;
+        _emailService = emailService;
     }
 
     [HttpPost("login")]
@@ -111,5 +117,44 @@ namespace API.Controllers
                             .Select(user => user.Address)
                             .FirstOrDefaultAsync();
     }
+
+    [HttpPost("forgot")]
+    public async Task<ActionResult> Forgot(ForgotDto forgotDto)
+    {
+        var user = await _userManager.FindByEmailAsync(forgotDto.Email);
+
+        if (user == null)
+            return Unauthorized();
+
+        string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        await _emailService.SendPasswordResetTokenEmail(user, resetToken);
+
+        return Ok();
+    }
+
+    [HttpPost("reset")]
+    public async Task<ActionResult> Reset(ResetDto resetDto)
+    {
+        var user = await _userManager.FindByEmailAsync(resetDto.Email);
+        
+        if (user == null)
+            return Unauthorized();
+
+        var result = await _userManager.ResetPasswordAsync(user, resetDto.Token, resetDto.NewPassword);
+
+        if(!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            return ValidationProblem();
+        }
+
+        return Ok();
+    }
+
   }
 }

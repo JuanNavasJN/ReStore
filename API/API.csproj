@@ -5,11 +5,17 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>2b7982c8-b46c-4cf9-9f6f-1d612667a1d8</UserSecretsId>
+    
+    <!-- This group contains project properties for RazorLight on .NET Core -->
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="CloudinaryDotNet" Version="1.21.0" />
+    <PackageReference Include="Mailjet.Api" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
@@ -19,6 +25,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="RazorLight" Version="2.3.1" />
     <PackageReference Include="Stripe.net" Version="41.19.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>

@@ -1,19 +1,18 @@
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
-import Link from 'next/link';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/app/store';
-import { signInUser } from './accountSlice';
+import { resetPassword } from './accountSlice';
+import { toast } from 'react-toastify';
 
-export default function Login() {
+export default function Reset() {
   const { push, query } = useRouter();
   const dispatch = useAppDispatch();
   const {
@@ -26,10 +25,22 @@ export default function Login() {
 
   async function submitForm(data: FieldValues) {
     try {
-      await dispatch(signInUser(data));
-      push((query?.from as string) || '/catalog');
-    } catch (error) {
-      console.error(error);
+      await dispatch(resetPassword({ ...data, ...query }));
+      toast.success('Password reset successfully');
+      push('/login');
+    } catch (error: any) {
+      const error1 = 'Invalid token.';
+      const error2 =
+        'Passwords must have at least one non alphanumeric character.';
+
+      if (error.error && error.error.includes(error1)) {
+        toast.error(error1);
+        push('/forgot');
+      } else if (error.error && error.error.includes(error2)) {
+        toast.error(error2);
+      } else {
+        console.error(error);
+      }
     }
   }
 
@@ -48,7 +59,7 @@ export default function Login() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Reset Password
       </Typography>
       <Box
         component="form"
@@ -59,20 +70,18 @@ export default function Login() {
         <TextField
           margin="normal"
           fullWidth
-          label="Username"
-          autoFocus
-          {...register('username', { required: 'Username is required' })}
-          error={!!errors.username}
-          helperText={errors?.username?.message as string}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          label="Password"
+          label="New Password"
           type="password"
-          {...register('password', { required: 'Password is required' })}
-          error={!!errors.password}
-          helperText={errors?.password?.message as string}
+          {...register('newPassword', {
+            required: 'Password is required',
+            pattern: {
+              value:
+                /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
+              message: 'Password does not meet complexity requirements'
+            }
+          })}
+          error={!!errors.newPassword}
+          helperText={errors?.newPassword?.message as string}
         />
 
         <LoadingButton
@@ -83,16 +92,8 @@ export default function Login() {
           loading={isSubmitting}
           disabled={!isValid}
         >
-          Sign In
+          Reset Password
         </LoadingButton>
-        <Grid container>
-          <Grid item xs={12} textAlign="center">
-            <Link href="/register">{"Don't have an account? Sign Up"}</Link>
-          </Grid>
-          <Grid item xs={12} textAlign="center">
-            <Link href="/forgot">{'Forgot password?'}</Link>
-          </Grid>
-        </Grid>
       </Box>
     </Container>
   );

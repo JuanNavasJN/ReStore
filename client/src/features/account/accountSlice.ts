@@ -40,12 +40,34 @@ export const fetchCurrentUser = createAsyncThunk<User>(
       localStorage.setItem('user', JSON.stringify(user));
       return user;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue({ error: error.data });
+      return thunkAPI.rejectWithValue({ error: error.data || error });
     }
   },
   {
     condition: () => {
       if (!localStorage.getItem('user')) return false;
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk<undefined, FieldValues>(
+  'account/forgotPassword',
+  async (data, thunkAPI) => {
+    try {
+      await agent.Account.forgot(data);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data || error });
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk<undefined, FieldValues>(
+  'account/resetPassword',
+  async (data, thunkAPI) => {
+    try {
+      await agent.Account.reset(data);
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data || error });
     }
   }
 );
@@ -81,7 +103,9 @@ export const accountSlice = createSlice({
     builder.addMatcher(
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
       (state, action) => {
-        const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+        const claims = JSON.parse(
+          Buffer.from(action.payload.token.split('.')[1], 'base64').toString()
+        );
         const roles =
           claims[
             'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
@@ -92,9 +116,16 @@ export const accountSlice = createSlice({
         };
       }
     );
-    builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
-      throw action.payload;
-    });
+    builder.addMatcher(
+      isAnyOf(
+        signInUser.rejected,
+        forgotPassword.rejected,
+        resetPassword.rejected
+      ),
+      (state, action) => {
+        throw action.payload;
+      }
+    );
   }
 });
 

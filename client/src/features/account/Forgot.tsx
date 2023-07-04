@@ -11,10 +11,11 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/app/store';
-import { signInUser } from './accountSlice';
+import { forgotPassword } from './accountSlice';
+import { toast } from 'react-toastify';
 
-export default function Login() {
-  const { push, query } = useRouter();
+export default function Forgot() {
+  const { push } = useRouter();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -26,8 +27,9 @@ export default function Login() {
 
   async function submitForm(data: FieldValues) {
     try {
-      await dispatch(signInUser(data));
-      push((query?.from as string) || '/catalog');
+      await dispatch(forgotPassword(data));
+      toast.success('Check your email');
+      push('/login');
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +50,7 @@ export default function Login() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Recover Password
       </Typography>
       <Box
         component="form"
@@ -59,20 +61,16 @@ export default function Login() {
         <TextField
           margin="normal"
           fullWidth
-          label="Username"
-          autoFocus
-          {...register('username', { required: 'Username is required' })}
-          error={!!errors.username}
-          helperText={errors?.username?.message as string}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          label="Password"
-          type="password"
-          {...register('password', { required: 'Password is required' })}
-          error={!!errors.password}
-          helperText={errors?.password?.message as string}
+          label="Email"
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^\w+[\w-\.]*\@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/,
+              message: 'Not a valid email address'
+            }
+          })}
+          error={!!errors.email}
+          helperText={errors?.email?.message as string}
         />
 
         <LoadingButton
@@ -83,14 +81,11 @@ export default function Login() {
           loading={isSubmitting}
           disabled={!isValid}
         >
-          Sign In
+          Recover Password
         </LoadingButton>
         <Grid container>
           <Grid item xs={12} textAlign="center">
-            <Link href="/register">{"Don't have an account? Sign Up"}</Link>
-          </Grid>
-          <Grid item xs={12} textAlign="center">
-            <Link href="/forgot">{'Forgot password?'}</Link>
+            <Link href="/login">{'Sign In'}</Link>
           </Grid>
         </Grid>
       </Box>
