@@ -4,7 +4,7 @@
 
 @media (max-width: 630px) {
   .desktop {
-    display: none;
+    display: none !important;
   }
 
   .mobile {
