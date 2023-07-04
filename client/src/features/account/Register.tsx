@@ -119,7 +119,7 @@ export default function Register() {
           Register
         </LoadingButton>
         <Grid container>
-          <Grid item>
+          <Grid item textAlign="center" xs={12}>
             <Link href="/login">{'Already have an account? Sign In'}</Link>
           </Grid>
         </Grid>

@@ -54,9 +54,11 @@ builder.Services.AddCors();
 builder.Services.AddIdentityCore<User>(opt => 
 {
     opt.User.RequireUniqueEmail = true;
+    opt.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
 })
     .AddRoles<Role>()
-    .AddEntityFrameworkStores<StoreContext>();
+    .AddEntityFrameworkStores<StoreContext>()
+    .AddDefaultTokenProviders();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt => 
     {
@@ -74,6 +76,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<PaymentService>();
 builder.Services.AddScoped<ImageService>();
+builder.Services.AddSingleton<EmailService>();
 
 var app = builder.Build();
 
