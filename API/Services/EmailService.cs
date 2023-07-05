@@ -48,7 +48,8 @@ namespace API.Services
 
         public async Task SendPasswordResetTokenEmail(Entities.User user, string token)
         {
-            string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
+            // string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
+            string templatesPath = Directory.GetCurrentDirectory() + "\\Services\\EmailTemplates\\";
 
             var engine = new RazorLightEngineBuilder()
                     .UseFileSystemProject(templatesPath)
