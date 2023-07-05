@@ -48,17 +48,33 @@ namespace API.Services
 
         public async Task SendPasswordResetTokenEmail(Entities.User user, string token)
         {
-            string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
+            var model = new {name = user.UserName, url = $"{_clientHost}/reset/{token}?email={user.Email}"};
 
-            var engine = new RazorLightEngineBuilder()
-                    .UseFileSystemProject(templatesPath)
-                    // .UseEmbeddedResourcesProject(typeof(EmailService).Assembly, "API.Services")
-                    .UseMemoryCachingProvider()
-                    .Build();
+            // ------------ scriban --------------------------
 
-            var model = new {Name = user.UserName, Url = $"{_clientHost}/reset/{token}?email={user.Email}"};
-            string html = await engine.CompileRenderAsync("ResetPassword", model);
-            // string html = await engine.CompileRenderAsync("EmailTemplates.ResetPassword", model);
+            var fileName = "Services/EmailTemplates/ResetPassword.tpl";
+            var data = File.ReadAllText(fileName);
+
+            Console.WriteLine($"==Template: {data}");
+
+            var tpl = Scriban.Template.Parse(data);
+            var html = tpl.Render(model);
+
+            Console.WriteLine($"==Template: {html}");
+
+            // ------------  // scriban --------------------------
+
+
+            // ------------ RazorLight --------------------------
+            // string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
+
+            // var engine = new RazorLightEngineBuilder()
+            //         .UseFileSystemProject(templatesPath)
+            //         .UseMemoryCachingProvider()
+            //         .Build();
+
+            // string html = await engine.CompileRenderAsync("ResetPassword", model);
+             // ------------ // RazorLight --------------------------
 
             await SendEmail("Reset Your Password", user.Email, html);
         }

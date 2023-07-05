@@ -1,9 +1,9 @@
 <html>
   <body>
-    <p>Hello @Model.Name,</p>
+    <p>Hello {{ name }}</p>
     <p>Please click below to reset your password.</p>
     <p>
-      <a href='@Model.Url'>Click here to reset</a>
+      <a href='{{ url }}'>Click here to reset</a>
     </p>
     <br/>
     <br/>
