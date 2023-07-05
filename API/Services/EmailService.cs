@@ -48,38 +48,29 @@ namespace API.Services
 
         public async Task SendPasswordResetTokenEmail(Entities.User user, string token)
         {
-            var model = new {name = user.UserName, url = $"{_clientHost}/reset/{token}?email={user.Email}"};
+            var model = new {Name = user.UserName, Url = $"{_clientHost}/reset/{token}?email={user.Email}"};
 
-            // ------------ scriban --------------------------
+            string template = """
+                <html>
+                    <body>
+                        <p>Hello @Model.Name,</p>
+                        <p>Please click below to reset your password.</p>
+                        <p>
+                        <a href='@Model.Url'>Click here to reset</a>
+                        </p>
+                        <br/>
+                        <br/>
+                        <b>Re-Store</b>
+                    </body>
+                </html>
+            """;
 
-            var fileName = "Services\\EmailTemplates\\ResetPassword.tpl";
-            // var currentDir = Environment.CurrentDirectory;
-            // var case1 = Path.GetFullPath(Path.Combine(currentDir, @"Services\\EmailTemplates\\ResetPassword.tpl"));
-            var data = File.ReadAllText(fileName);
+            RazorLightEngine engine = new RazorLightEngineBuilder()
+                    .UseMemoryCachingProvider()
+                    .Build();
 
-            // Console.WriteLine($"==Path: {case1}");
-
-            Console.WriteLine($"==Template: {data}");
-
-            var tpl = Scriban.Template.Parse(data);
-            var html = tpl.Render(model);
-
-            Console.WriteLine($"==Template: {html}");
-
-            // ------------  // scriban --------------------------
-
-
-            // ------------ RazorLight --------------------------
-            // string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
-
-            // var engine = new RazorLightEngineBuilder()
-            //         .UseFileSystemProject(templatesPath)
-            //         .UseMemoryCachingProvider()
-            //         .Build();
-
-            // string html = await engine.CompileRenderAsync("ResetPassword", model);
-             // ------------ // RazorLight --------------------------
-
+            string html = await engine.CompileRenderStringAsync("ResetPassword", template, model);
+            
             await SendEmail("Reset Your Password", user.Email, html);
         }
     }
