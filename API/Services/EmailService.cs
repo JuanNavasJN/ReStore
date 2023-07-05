@@ -52,8 +52,12 @@ namespace API.Services
 
             // ------------ scriban --------------------------
 
-            var fileName = "Services/EmailTemplates/ResetPassword.tpl";
+            var fileName = "Services\\EmailTemplates\\ResetPassword.tpl";
+            // var currentDir = Environment.CurrentDirectory;
+            // var case1 = Path.GetFullPath(Path.Combine(currentDir, @"Services\\EmailTemplates\\ResetPassword.tpl"));
             var data = File.ReadAllText(fileName);
+
+            // Console.WriteLine($"==Path: {case1}");
 
             Console.WriteLine($"==Template: {data}");
 
