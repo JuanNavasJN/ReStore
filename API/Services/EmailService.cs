@@ -48,18 +48,19 @@ namespace API.Services
 
         public async Task SendPasswordResetTokenEmail(Entities.User user, string token)
         {
-            // string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
-            string templatesPath = Directory.GetCurrentDirectory() + "\\Services\\EmailTemplates\\";
+            string templatesPath = new FileInfo("Services/EmailTemplates/").Directory.FullName;
 
             var engine = new RazorLightEngineBuilder()
                     .UseFileSystemProject(templatesPath)
+                    // .UseEmbeddedResourcesProject(typeof(EmailService).Assembly, "API.Services")
                     .UseMemoryCachingProvider()
                     .Build();
 
             var model = new {Name = user.UserName, Url = $"{_clientHost}/reset/{token}?email={user.Email}"};
-            string result = await engine.CompileRenderAsync("ResetPassword.cshtml", model);
+            string html = await engine.CompileRenderAsync("ResetPassword", model);
+            // string html = await engine.CompileRenderAsync("EmailTemplates.ResetPassword", model);
 
-            await SendEmail("Reset Your Password", user.Email, result);
+            await SendEmail("Reset Your Password", user.Email, html);
         }
     }
 }
