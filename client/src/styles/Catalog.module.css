@@ -1,5 +1,5 @@
 .filtersButton {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 899px) {
@@ -9,7 +9,7 @@
   }
 
   .filtersButton {
-    display: block;
+    display: block !important;
   }
 
   .desktopFilters {
